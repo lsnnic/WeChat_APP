@@ -17,7 +17,15 @@
 
     </android.support.v4.view.ViewPager>
 
+    <View
+        android:background="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
+
     <LinearLayout
+        android:background="#eeeeee"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

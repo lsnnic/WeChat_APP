@@ -34,6 +34,10 @@ public class MainActivityWithTab extends AppCompatActivity {
 
     private List<TabView> mTabs = new ArrayList<>();
 
+    private static final String BUNDLE_KEY_POS = "bundle_key_pos";
+
+    private int mCurTabPos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         /**
@@ -48,10 +52,13 @@ public class MainActivityWithTab extends AppCompatActivity {
          */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_tab);
-        L.d("activity onCreate");
+//        L.d("activity onCreate");
+        if(savedInstanceState!=null){
+            mCurTabPos = savedInstanceState.getInt(BUNDLE_KEY_POS,0);
+        }
         initView();
         initViewPager();
-
+        initEvents();
     }
 
     private void initView(){
@@ -71,8 +78,40 @@ public class MainActivityWithTab extends AppCompatActivity {
         mTabs.add(mBtnFind);
         mTabs.add(mBtnMine);
 
-        mBtnWeChat.setProgress(1);
+        setCurrentTab(mCurTabPos);
 
+    }
+
+    private void setCurrentTab(int pos){
+        for(int i=0;i<mTabs.size();i++){
+            TabView tabView = mTabs.get(i);
+            if(i==pos){
+                tabView.setProgress(1);
+            }
+            else{
+                tabView.setProgress(0);
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(BUNDLE_KEY_POS,mVpMain.getCurrentItem());
+        super.onSaveInstanceState(outState);
+    }
+
+    private void initEvents(){
+        for (int i=0;i<mTabs.size();i++){
+            TabView tabView = mTabs.get(i);
+            final int finalI = i;
+            tabView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mVpMain.setCurrentItem(finalI,false);
+                    setCurrentTab(finalI);
+                }
+            });
+        }
     }
 
     private void initViewPager(){
