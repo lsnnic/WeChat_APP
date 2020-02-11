@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.lsnnic.wechat_app.R;
+import com.example.lsnnic.wechat_app.utils.L;
 
 public class TabFragment extends Fragment {
 
@@ -33,11 +34,13 @@ public class TabFragment extends Fragment {
         if(arguments!=null){
             mTitle = arguments.getString(BUNDLE_KEY_TITLE,"");
         }
+        L.d("onCreate, title = "+mTitle);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        L.d("onCreateView, title = "+mTitle);
         return inflater.inflate(R.layout.fragment_tab,container,false);
     }
 
@@ -47,4 +50,26 @@ public class TabFragment extends Fragment {
         mTvTitle = view.findViewById(R.id.tv_title);
         mTvTitle.setText(mTitle);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        L.d("onDestroy, title = "+mTitle);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        L.d("onDestroyView, title = "+mTitle);
+    }
+
+    public void changeTitle(String title){
+        // 注意这里，如果一个Fragment还未初始化onCreate onCreateView时就调用一定会报错，所以在任何暴露给外界的方法中
+        // 一定要做好判断
+        if(!isAdded()){
+            return;
+        }
+        mTvTitle.setText(title);
+    }
+
 }
