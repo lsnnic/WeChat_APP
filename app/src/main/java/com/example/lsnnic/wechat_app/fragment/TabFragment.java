@@ -19,6 +19,16 @@ public class TabFragment extends Fragment {
     private TextView mTvTitle;
     private String mTitle;
 
+    public static interface OnTitleClickListener{
+        void onClick(String title);
+    }
+
+    private OnTitleClickListener mListener;
+
+    public void setOnTitleClickListener(OnTitleClickListener listener){
+        mListener = listener;
+    }
+
     public static TabFragment newInstance(String title){
         Bundle bundle = new Bundle();
         bundle.putString(BUNDLE_KEY_TITLE,title);
@@ -34,13 +44,13 @@ public class TabFragment extends Fragment {
         if(arguments!=null){
             mTitle = arguments.getString(BUNDLE_KEY_TITLE,"");
         }
-        L.d("onCreate, title = "+mTitle);
+//        L.d("onCreate, title = "+mTitle);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        L.d("onCreateView, title = "+mTitle);
+//        L.d("onCreateView, title = "+mTitle);
         return inflater.inflate(R.layout.fragment_tab,container,false);
     }
 
@@ -49,18 +59,41 @@ public class TabFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mTvTitle = view.findViewById(R.id.tv_title);
         mTvTitle.setText(mTitle);
+        mTvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /**
+                 * 获取 Activity 对象
+                 * 写法1：
+                 * MainActivity activity = (MainActivity) getActivity();
+                 * activity.changeWeChatTab("微信 Changed");
+                 * 写法2：
+                 * Activity activity = getActivity();
+                 * if(activity instanceof MainActivity){
+                 *     ((MainActivity) activity).changeWeChatTab("微信 Changed!")
+                 * }
+                 *
+                 * 问题在于：我们Fragment会触发一些事件，Activity去相应这些事件。
+                 * 就是说，Fragment只负责触发，如何执行具体功能是Activity的事。
+                 *
+                 */
+                if(mListener!=null){
+                    mListener.onClick("微信Changed！");
+                }
+            }
+        });
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        L.d("onDestroy, title = "+mTitle);
+//        L.d("onDestroy, title = "+mTitle);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        L.d("onDestroyView, title = "+mTitle);
+//        L.d("onDestroyView, title = "+mTitle);
     }
 
     public void changeTitle(String title){

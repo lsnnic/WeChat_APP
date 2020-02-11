@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--android:screenOrientation="portrait" 这个属性用来强制Activity只能竖直显示，用来弥补new4个Fragment那种错误做法可能造成的问题-->
+        <!--但并不是这样就能万无一失了，在用户将APP置于后台时，如果应用被系统杀死，用户再次打开APP，也会onCreate，还是会出现我们不希望出现的情况-->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
